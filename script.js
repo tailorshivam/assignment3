@@ -1,43 +1,57 @@
-const box = document.getElementById("box");
-let startTime, endTime;
-
-function getRandomColor() {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
+$(document).ready(function () {
+  function showMessage(message, type) {
+    $("#messageBox")
+      .removeClass("success error")
+      .addClass(type)
+      .text(message)
+      .slideDown();
   }
-  return color;
-}
 
-function getRandomPosition() {
-  const maxX = window.innerWidth - 100;
-  const maxY = window.innerHeight - 100;
-  const x = Math.floor(Math.random() * maxX);
-  const y = Math.floor(Math.random() * maxY);
-  return { x, y };
-}
+  $(".toggle-password").click(function () {
+    const passwordInput = $("#password");
+    const type = passwordInput.attr("type") === "password" ? "text" : "password";
+    passwordInput.attr("type", type);
+    $(this).text(type === "password" ? "Show" : "Hide");
+  });
 
-function showBox() {
-  const { x, y } = getRandomPosition();
-  box.style.left = `${x}px`;
-  box.style.top = `${y}px`;
-  box.style.backgroundColor = getRandomColor();
-  startTime = new Date().getTime();
-  box.classList.add("show");
-  box.classList.remove("clicked");
-}
+  $("#registrationForm").on("submit", function (e) {
+    e.preventDefault();
+    $("#messageBox").hide();
 
-box.addEventListener("click", () => {
-  endTime = new Date().getTime();
-  const reactionTime = (endTime - startTime) / 1000;
+    const name = $("#name").val().trim();
+    const email = $("#email").val().trim();
+    const phone = $("#phone").val().trim();
+    const password = $("#password").val();
+    const confirmPassword = $("#confirmPassword").val();
 
-  box.classList.add("clicked");
-  box.classList.remove("show");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-  alert(`🎯 Your reaction time: ${reactionTime.toFixed(2)} seconds`);
+    if (!name || !email || !phone || !password || !confirmPassword) {
+      showMessage("All fields are required.", "error");
+      return;
+    }
 
-  showBox();
+    if (!emailRegex.test(email)) {
+      showMessage("Invalid email format.", "error");
+      return;
+    }
+
+    if (!/^\d{10}$/.test(phone)) {
+      showMessage("Phone number must be exactly 10 digits.", "error");
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      showMessage("Password must be at least 8 characters, include uppercase, lowercase, and a number.", "error");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      showMessage("Passwords do not match.", "error");
+      return;
+    }
+
+    showMessage("Registration successful!", "success");
+  });
 });
-
-showBox();

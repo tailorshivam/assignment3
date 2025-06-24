@@ -3,15 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reaction Time Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Form Validation</title>
+    <link rel="stylesheet" href="styles.css"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
-    <div class="container">
-    <h1>Reaction Time Game</h1>
-    <p>Click the moving box as fast as you can!</p>
-    <div id="box" class="box hidden"></div>
+    <div class="form-container">
+    <form id="registrationForm" novalidate>
+      <h2>Registration Form</h2>
+      <div id="messageBox"></div>
+
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="phone">Phone Number</label>
+      <input type="text" id="phone" name="phone" maxlength="10" required />
+
+      <label for="password">Password</label>
+      <div class="password-field">
+        <input type="password" id="password" name="password" required />
+        <button type="button" class="toggle-password">Show</button>
+      </div>
+
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required />
+
+      <button type="submit">Register</button>
+    </form>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
